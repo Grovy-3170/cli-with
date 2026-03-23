@@ -1,0 +1,41 @@
+# Binaries
+auth
+auth.exe
+auth.test
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Vendor
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build output
+/bin/
+/dist/
+
+# Go workspace file
+go.work
+
+# Dependency directories
+vendor/
+
+# Coverage output
+*.out
+coverage.html
+
+# GoReleaser
+dist/

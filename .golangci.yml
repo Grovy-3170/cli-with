@@ -1,0 +1,41 @@
+# golangci-lint configuration
+# Version 2 format
+version: 2
+
+# Run timeout
+timeout: 5m
+
+# Linters enabled
+linters:
+  enable:
+    - errcheck    # Check unchecked errors
+    - gosimple    # Simplify code
+    - govet       # Vet examines source
+    - ineffassign # Detect ineffective assignments
+    - staticcheck # Static analysis
+    - unused      # Check unused code
+    - gofmt       # Format check
+    - goimports   # Import formatting
+    - misspell    # Spell check
+    - revive      # Fast linter
+    - unconvert   # Detect unnecessary type conversions
+    - gocyclo     # Cyclomatic complexity
+
+# Linter settings
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  
+  gocyclo:
+    min-complexity: 15
+
+# Issues configuration
+issues:
+  # Exclude common generated files
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - staticcheck
