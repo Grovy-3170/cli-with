@@ -48,10 +48,6 @@ func InitCmd(cfg *Config) *cobra.Command {
 				return fmt.Errorf("reading password: %w", err)
 			}
 
-			if len(password) == 0 {
-				return fmt.Errorf("password cannot be empty")
-			}
-
 			confirmPassword, err := cfg.GetPassword("Confirm password: ")
 			if err != nil {
 				return fmt.Errorf("reading password: %w", err)
