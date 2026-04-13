@@ -199,18 +199,18 @@ func TestInitCommand_EmptyPassword(t *testing.T) {
 	defer os.Setenv("WITH_VAULT_DIR", origVaultDir)
 
 	passwordInput = &testPasswordReader{
-		input: []string{""},
+		input: []string{"", ""},
 	}
 
 	rootCmd := newRootCmd()
 	rootCmd.SetArgs([]string{"init", "--user", "testuser"})
-	err := rootCmd.Execute()
-	if err == nil {
-		t.Error("Expected error when password is empty")
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatalf("Init command failed with empty password: %v", err)
 	}
 
-	if !strings.Contains(err.Error(), "password cannot be empty") {
-		t.Errorf("Expected error message about empty password, got: %s", err.Error())
+	vaultPath := filepath.Join(vaultDir, "testuser.vault")
+	if _, err := os.Stat(vaultPath); os.IsNotExist(err) {
+		t.Error("Vault file was not created with empty password")
 	}
 }
 
