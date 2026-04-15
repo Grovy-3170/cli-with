@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0] - 2026-04-15
+
+### Added
+
+- **`--password` flag**: Pass the vault password directly on the command line for scripting and automation. Takes precedence over `--password-file`.
+- **Empty password support**: Vaults can now be initialized and used with an empty password, enabling passwordless local setups.
+
 ## [v0.1.1] - 2026-03-23
 
 ### Added

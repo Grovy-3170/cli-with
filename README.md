@@ -168,6 +168,7 @@ with remove --user alice
 | Flag | Description |
 |------|-------------|
 | `--user string` | Username for the vault (prompts interactively if not provided) |
+| `--password string` | Vault password (use for scripting; takes precedence over `--password-file`) |
 | `--password-file string` | Path to file containing the vault password |
 
 ### Commands
@@ -257,9 +258,17 @@ Print the version number.
 with version
 ```
 
-### Automation with Password Files
+### Automation with Passwords
 
-For CI/CD or automation, use `--password-file` to avoid interactive prompts:
+For CI/CD or automation, avoid interactive prompts using either `--password` or `--password-file`.
+
+**Inline password** (simplest):
+
+```bash
+with --user alice --password "my-secure-password" list
+```
+
+**Password file** (preferred for shared environments):
 
 ```bash
 # Store password securely in a temp file (restricted permissions)
@@ -273,7 +282,9 @@ with --user alice --password-file /tmp/vault-password list
 rm /tmp/vault-password
 ```
 
-**Warning**: Password files should have strict permissions (0600) and be deleted after use.
+`--password` takes precedence over `--password-file` if both are provided.
+
+**Warning**: Password files should have strict permissions (0600) and be deleted after use. Prefer `--password-file` over `--password` when the password may appear in process listings.
 
 ### Custom Vault Location
 
