@@ -214,6 +214,89 @@ func TestInitCommand_EmptyPassword(t *testing.T) {
 	}
 }
 
+func TestPasswordFlag_Init(t *testing.T) {
+	tempDir := t.TempDir()
+	vaultDir := filepath.Join(tempDir, "vaults")
+
+	origVaultDir := os.Getenv("WITH_VAULT_DIR")
+	os.Setenv("WITH_VAULT_DIR", vaultDir)
+	defer os.Setenv("WITH_VAULT_DIR", origVaultDir)
+
+	// No interactive input needed — password comes from the flag.
+	passwordInput = &testPasswordReader{input: []string{}}
+
+	rootCmd := newRootCmd()
+	rootCmd.SetArgs([]string{"--password", "flagpass", "init", "--user", "testuser"})
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatalf("Init with --password flag failed: %v", err)
+	}
+
+	vaultPath := filepath.Join(vaultDir, "testuser.vault")
+	if _, err := os.Stat(vaultPath); os.IsNotExist(err) {
+		t.Error("Vault file was not created")
+	}
+}
+
+func TestPasswordFlag_EmptyPassword(t *testing.T) {
+	tempDir := t.TempDir()
+	vaultDir := filepath.Join(tempDir, "vaults")
+
+	origVaultDir := os.Getenv("WITH_VAULT_DIR")
+	os.Setenv("WITH_VAULT_DIR", vaultDir)
+	defer os.Setenv("WITH_VAULT_DIR", origVaultDir)
+
+	passwordInput = &testPasswordReader{input: []string{}}
+
+	// Init with an explicit empty password via flag.
+	rootCmd := newRootCmd()
+	rootCmd.SetArgs([]string{"--password", "", "init", "--user", "testuser"})
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatalf("Init with empty --password flag failed: %v", err)
+	}
+
+	vaultPath := filepath.Join(vaultDir, "testuser.vault")
+	if _, err := os.Stat(vaultPath); os.IsNotExist(err) {
+		t.Fatal("Vault file was not created")
+	}
+}
+
+func TestPasswordFlag_UsedForDecrypt(t *testing.T) {
+	tempDir := t.TempDir()
+	vaultDir := filepath.Join(tempDir, "vaults")
+
+	origVaultDir := os.Getenv("WITH_VAULT_DIR")
+	os.Setenv("WITH_VAULT_DIR", vaultDir)
+	defer os.Setenv("WITH_VAULT_DIR", origVaultDir)
+
+	if err := os.MkdirAll(vaultDir, 0700); err != nil {
+		t.Fatalf("Failed to create vault directory: %v", err)
+	}
+
+	// Create a vault with a known password.
+	vault, err := storage.Create("flagpass", map[string]string{"MY_KEY": "myvalue"})
+	if err != nil {
+		t.Fatalf("Failed to create vault: %v", err)
+	}
+	if err := vault.Save(filepath.Join(vaultDir, "testuser.vault")); err != nil {
+		t.Fatalf("Failed to save vault: %v", err)
+	}
+
+	passwordInput = &testPasswordReader{input: []string{}}
+
+	rootCmd := newRootCmd()
+	rootCmd.SetArgs([]string{"--password", "flagpass", "list", "--user", "testuser"})
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatalf("List with --password flag failed: %v", err)
+	}
+
+	// Wrong password should fail.
+	rootCmd2 := newRootCmd()
+	rootCmd2.SetArgs([]string{"--password", "wrongpass", "list", "--user", "testuser"})
+	if err := rootCmd2.Execute(); err == nil {
+		t.Fatal("Expected error with wrong --password flag, got nil")
+	}
+}
+
 func TestListCommand_ShowsKeyNames(t *testing.T) {
 	tempDir := t.TempDir()
 	vaultDir := filepath.Join(tempDir, "vaults")

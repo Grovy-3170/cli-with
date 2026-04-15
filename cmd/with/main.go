@@ -45,37 +45,17 @@ func (t terminalConfirmationReader) ReadConfirmation(prompt string) (string, err
 // Global state (replaceable for testing)
 var (
 	user              string
+	password          string
 	passwordFile      string
 	keyValue          string
 	passwordInput     passwordReader     = terminalPasswordReader{}
 	confirmationInput confirmationReader = terminalConfirmationReader{}
 )
 
-func getPassword(prompt string) (string, error) {
-	if passwordFile != "" {
-		data, err := os.ReadFile(passwordFile) // #nosec G304
-		if err != nil {
-			return "", fmt.Errorf("reading password file: %w", err)
-		}
-		return strings.TrimSpace(string(data)), nil
-	}
-	return passwordInput.ReadPassword(prompt)
-}
-
 // newRootCmd creates and returns the root command with all subcommands registered.
 // This is also used by tests.
 func newRootCmd() *cobra.Command {
-	// Create command config with dependencies
-	cfg := &commands.Config{
-		User:         &user,
-		PasswordFile: &passwordFile,
-		KeyValue:     &keyValue,
-		GetPassword:  getPassword,
-		ReadPassword: passwordInput.ReadPassword,
-		ReadConfirm:  confirmationInput.ReadConfirmation,
-	}
-
-	// Create root command
+	// Create root command first so we can use flags.Changed inside getPassword.
 	rootCmd := &cobra.Command{
 		Use:   "with",
 		Short: "Run any command with your secrets",
@@ -89,7 +69,32 @@ with them injected as environment variables — isolated to the subprocess only.
 
 	// Register global flags
 	rootCmd.PersistentFlags().StringVar(&user, "user", "", "Username for the vault")
+	rootCmd.PersistentFlags().StringVar(&password, "password", "", "Vault password")
 	rootCmd.PersistentFlags().StringVar(&passwordFile, "password-file", "", "Path to password file")
+
+	getPassword := func(prompt string) (string, error) {
+		if rootCmd.PersistentFlags().Changed("password") {
+			return password, nil
+		}
+		if passwordFile != "" {
+			data, err := os.ReadFile(passwordFile) // #nosec G304
+			if err != nil {
+				return "", fmt.Errorf("reading password file: %w", err)
+			}
+			return strings.TrimSpace(string(data)), nil
+		}
+		return passwordInput.ReadPassword(prompt)
+	}
+
+	// Create command config with dependencies
+	cfg := &commands.Config{
+		User:         &user,
+		PasswordFile: &passwordFile,
+		KeyValue:     &keyValue,
+		GetPassword:  getPassword,
+		ReadPassword: passwordInput.ReadPassword,
+		ReadConfirm:  confirmationInput.ReadConfirmation,
+	}
 
 	// Register all commands
 	rootCmd.AddCommand(
