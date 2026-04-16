@@ -88,12 +88,14 @@ with them injected as environment variables — isolated to the subprocess only.
 
 	// Create command config with dependencies
 	cfg := &commands.Config{
-		User:         &user,
-		PasswordFile: &passwordFile,
-		KeyValue:     &keyValue,
-		GetPassword:  getPassword,
-		ReadPassword: passwordInput.ReadPassword,
-		ReadConfirm:  confirmationInput.ReadConfirmation,
+		User:            &user,
+		Password:        &password,
+		PasswordFile:    &passwordFile,
+		KeyValue:        &keyValue,
+		PasswordChanged: func() bool { return rootCmd.PersistentFlags().Changed("password") },
+		GetPassword:     getPassword,
+		ReadPassword:    passwordInput.ReadPassword,
+		ReadConfirm:     confirmationInput.ReadConfirmation,
 	}
 
 	// Register all commands
@@ -104,6 +106,7 @@ with them injected as environment variables — isolated to the subprocess only.
 		commands.GetCmd(cfg),
 		commands.RemoveCmd(cfg),
 		commands.ExecCmd(cfg),
+		commands.AliasCmd(cfg),
 		commands.VersionCmd(Version),
 	)
 

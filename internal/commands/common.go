@@ -12,12 +12,14 @@ import (
 
 // Config holds shared configuration and dependencies for all commands.
 type Config struct {
-	User         *string
-	PasswordFile *string
-	KeyValue     *string
-	GetPassword  func(prompt string) (string, error)
-	ReadPassword func(prompt string) (string, error)
-	ReadConfirm  func(prompt string) (string, error)
+	User            *string
+	Password        *string
+	PasswordFile    *string
+	KeyValue        *string
+	PasswordChanged func() bool
+	GetPassword     func(prompt string) (string, error)
+	ReadPassword    func(prompt string) (string, error)
+	ReadConfirm     func(prompt string) (string, error)
 }
 
 // validKeyNameRegex validates key names: must start with letter or underscore,

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.3.0] - 2026-04-17
+
+### Added
+
+- **`with alias` command**: Save named shortcuts for `with exec` invocations with `with alias add`, list and remove them, and emit shell lines via `with alias shell` that activate all saved shortcuts as native aliases. Supports bash, zsh, and fish. Activate with a single `eval "$(with alias shell)"` line in your shell config.
+- Aliases are stored at `~/.config/cli-with/aliases.json` (overridable via `WITH_ALIAS_FILE`).
+
 ## [v0.2.0] - 2026-04-15
 
 ### Added

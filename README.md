@@ -161,6 +161,49 @@ Remove entire vault:
 with remove --user alice
 ```
 
+## Aliases
+
+Save frequently-used `with exec` invocations as named shortcuts, then activate
+them as native shell commands with one line in your shell config.
+
+### Save an alias
+
+```bash
+with alias add <name> [--user <user>] [--password <pw>] [--password-file <path>] -- <command> [args...]
+```
+
+The global flags (`--user`, `--password`, `--password-file`) are captured at
+save time. Everything after `--` is the command the alias will run.
+
+### List and remove
+
+```bash
+with alias list
+with alias remove <name>
+```
+
+### Activate in your shell
+
+Add to `~/.bashrc` or `~/.zshrc`:
+
+```bash
+eval "$(with alias shell)"
+```
+
+For fish, add to `~/.config/fish/config.fish`:
+
+```bash
+with alias shell --shell fish | source
+```
+
+After reloading your shell, each saved alias runs as a native command. The
+shell is auto-detected from `$SHELL`; override with `--shell bash|zsh|fish`.
+
+### Storage
+
+Aliases are stored in plain JSON at `~/.config/cli-with/aliases.json`, or at
+the path set in `WITH_ALIAS_FILE` if defined.
+
 ## Usage
 
 ### Global Flags
@@ -249,6 +292,20 @@ with remove --user <username> <KEY_NAME>
 # Remove entire vault (prompts for confirmation)
 with remove --user <username>
 ```
+
+#### `with alias`
+
+Save, list, and remove shortcuts for `with exec`, and emit shell lines that
+activate them as native aliases.
+
+```bash
+with alias add <name> [--user <user>] [--password <pw>] [--password-file <path>] -- <command> [args...]
+with alias list
+with alias remove <name>
+with alias shell [--shell bash|zsh|fish]
+```
+
+See the [Aliases](#aliases) section for details.
 
 #### `with version`
 
