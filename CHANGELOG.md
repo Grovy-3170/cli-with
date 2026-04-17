@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.3.1] - 2026-04-17
+
+### Added
+
+- **Pre-built binaries**: Automated releases via GoReleaser. Every `v*` tag now produces archives for Linux, macOS, and Windows (amd64 + arm64) on the [Releases page](https://github.com/Grovy-3170/cli-with/releases). No Go toolchain required to install.
+
 ## [v0.3.0] - 2026-04-17
 
 ### Added

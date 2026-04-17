@@ -54,9 +54,23 @@ The binary will be created at `./with`. Install it system-wide with:
 make install
 ```
 
-### Binary Releases
+### Pre-built Binaries (no Go required)
 
-Download pre-built binaries from the [Releases page](https://github.com/Grovy-3170/cli-with/releases).
+Download the archive for your platform from the [Releases page](https://github.com/Grovy-3170/cli-with/releases), or grab the latest in one line:
+
+**macOS (Apple Silicon):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_$(curl -sL https://api.github.com/repos/Grovy-3170/cli-with/releases/latest | grep tag_name | cut -d\" -f4 | sed 's/^v//')_Darwin_arm64.tar.gz | tar -xz && sudo mv with /usr/local/bin/
+```
+
+**Linux (x86_64):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_$(curl -sL https://api.github.com/repos/Grovy-3170/cli-with/releases/latest | grep tag_name | cut -d\" -f4 | sed 's/^v//')_Linux_amd64.tar.gz | tar -xz && sudo mv with /usr/local/bin/
+```
+
+**Windows:** Download the `.zip` from the [Releases page](https://github.com/Grovy-3170/cli-with/releases), extract, and add the directory to your PATH.
+
+On macOS, first run may trigger a Gatekeeper warning — right-click the binary and choose "Open" once, or run `xattr -d com.apple.quarantine /usr/local/bin/with`.
 
 ### Updating
 
