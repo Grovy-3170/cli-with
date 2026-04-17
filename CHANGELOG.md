@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.3.2] - 2026-04-17
+
+### Changed
+
+- **Release archive filenames** no longer include the version (e.g., `with_Darwin_arm64.tar.gz` instead of `with_0.3.1_Darwin_arm64.tar.gz`). This enables stable `releases/latest/download/…` URLs, so the install one-liner in the README works without inline version detection. Older releases keep their original filenames.
+- **README** reordered: pre-built binary install is now the primary path; `go install` and build-from-source are listed after.
+
 ## [v0.3.1] - 2026-04-17
 
 ### Added

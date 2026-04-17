@@ -27,7 +27,39 @@ Your API keys stay encrypted, never touch your shell history, and vanish after t
 
 ## Installation
 
+### Pre-built Binary (recommended)
+
+No Go toolchain required. Pick the one-liner for your platform:
+
+**macOS (Apple Silicon):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_Darwin_arm64.tar.gz | tar -xz with && sudo mv with /usr/local/bin/
+```
+
+**macOS (Intel):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_Darwin_amd64.tar.gz | tar -xz with && sudo mv with /usr/local/bin/
+```
+
+**Linux (x86_64):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_Linux_amd64.tar.gz | tar -xz with && sudo mv with /usr/local/bin/
+```
+
+**Linux (ARM64):**
+```bash
+curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_Linux_arm64.tar.gz | tar -xz with && sudo mv with /usr/local/bin/
+```
+
+**Windows:** Download the `.zip` for your architecture from the [Releases page](https://github.com/Grovy-3170/cli-with/releases), extract `with.exe`, and add its directory to your `PATH`.
+
+Verify with `with version`.
+
+On macOS, the first run may trigger a Gatekeeper warning — right-click the binary and choose "Open" once, or run `xattr -d com.apple.quarantine /usr/local/bin/with`.
+
 ### Go Install
+
+If you already have Go installed:
 
 ```bash
 go install github.com/Grovy-3170/cli-with/cmd/with@latest
@@ -42,6 +74,8 @@ go install github.com/Grovy-3170/cli-with/cmd/with@latest
 
 ### Build from Source
 
+For contributors or anyone who wants the tip of `main`:
+
 ```bash
 git clone https://github.com/Grovy-3170/cli-with.git
 cd cli-with
@@ -54,37 +88,16 @@ The binary will be created at `./with`. Install it system-wide with:
 make install
 ```
 
-### Pre-built Binaries (no Go required)
-
-Download the archive for your platform from the [Releases page](https://github.com/Grovy-3170/cli-with/releases), or grab the latest in one line:
-
-**macOS (Apple Silicon):**
-```bash
-curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_$(curl -sL https://api.github.com/repos/Grovy-3170/cli-with/releases/latest | grep tag_name | cut -d\" -f4 | sed 's/^v//')_Darwin_arm64.tar.gz | tar -xz && sudo mv with /usr/local/bin/
-```
-
-**Linux (x86_64):**
-```bash
-curl -L https://github.com/Grovy-3170/cli-with/releases/latest/download/with_$(curl -sL https://api.github.com/repos/Grovy-3170/cli-with/releases/latest | grep tag_name | cut -d\" -f4 | sed 's/^v//')_Linux_amd64.tar.gz | tar -xz && sudo mv with /usr/local/bin/
-```
-
-**Windows:** Download the `.zip` from the [Releases page](https://github.com/Grovy-3170/cli-with/releases), extract, and add the directory to your PATH.
-
-On macOS, first run may trigger a Gatekeeper warning — right-click the binary and choose "Open" once, or run `xattr -d com.apple.quarantine /usr/local/bin/with`.
-
 ### Updating
 
-```bash
-# If installed via go install
-go install github.com/Grovy-3170/cli-with/cmd/with@latest
-
-# If built from source
-git pull && make build && make install
-```
+Re-run the same install command you used the first time. For binary installs, re-running the `curl … | tar … && sudo mv …` one-liner replaces the old binary in place.
 
 ### Uninstalling
 
 ```bash
+# If installed via pre-built binary
+sudo rm /usr/local/bin/with
+
 # If installed via go install
 rm $(go env GOPATH)/bin/with
 

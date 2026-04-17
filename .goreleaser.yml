@@ -24,7 +24,7 @@ builds:
 
 archives:
   - id: with
-    name_template: "with_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "with_{{ .Os }}_{{ .Arch }}"
     formats:
       - tar.gz
     format_overrides:
