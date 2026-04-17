@@ -280,6 +280,10 @@ func TestValidateKeyName(t *testing.T) {
 - Open a [Discussion](https://github.com/Grovy-3170/cli-with/discussions) for questions
 - Open an [Issue](https://github.com/Grovy-3170/cli-with/issues) for bugs or feature requests
 
+## Releasing
+
+Maintainers: see [RELEASING.md](RELEASING.md) for the tag-and-ship checklist.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
